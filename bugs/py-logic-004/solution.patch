@@ -1,0 +1,10 @@
+--- a/buggy.py
++++ b/buggy.py
+@@ -2,6 +2,6 @@
+     """Return the maximum value in a non-empty list."""
+     max_val = numbers[0]
+     for n in numbers[1:]:
+-        if n < max_val:
++        if n > max_val:
+             max_val = n
+     return max_val

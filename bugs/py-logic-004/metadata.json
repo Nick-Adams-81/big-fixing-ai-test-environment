@@ -1,0 +1,8 @@
+{
+  "id": "py-logic-004",
+  "language": "python",
+  "category": "logic",
+  "difficulty": "easy",
+  "description": "Comparison is reversed: n < max_val updates the max, so the function returns the minimum instead.",
+  "entrypoint": "buggy.py"
+}

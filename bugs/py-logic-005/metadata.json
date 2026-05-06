@@ -1,0 +1,8 @@
+{
+  "id": "py-logic-005",
+  "language": "python",
+  "category": "logic",
+  "difficulty": "easy",
+  "description": "Compares s to s[1:] (string without first char) instead of s[::-1] (reversed string).",
+  "entrypoint": "buggy.py"
+}

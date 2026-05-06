@@ -1,0 +1,8 @@
+{
+  "id": "py-logic-002",
+  "language": "python",
+  "category": "logic",
+  "difficulty": "easy",
+  "description": "Uses >= 0 instead of > 0, incorrectly counting zero as a positive number.",
+  "entrypoint": "buggy.py"
+}

@@ -1,0 +1,10 @@
+--- a/buggy.py
++++ b/buggy.py
+@@ -1,6 +1,6 @@
+ def sum_except_first(numbers):
+     """Return the sum of all elements except the first."""
+     total = 0
+-    for i in range(len(numbers)):
++    for i in range(1, len(numbers)):
+         total += numbers[i]
+     return total

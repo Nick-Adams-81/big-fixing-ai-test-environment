@@ -1,0 +1,8 @@
+{
+  "id": "py-off-by-one-002",
+  "language": "python",
+  "category": "off-by-one",
+  "difficulty": "easy",
+  "description": "Slice uses n-1 as the stop index instead of n, returning one fewer element than requested.",
+  "entrypoint": "buggy.py"
+}

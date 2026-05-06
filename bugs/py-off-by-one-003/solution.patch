@@ -1,0 +1,9 @@
+--- a/buggy.py
++++ b/buggy.py
+@@ -1,5 +1,5 @@
+ def binary_search(arr, target):
+     """Return the index of target in sorted arr, or -1 if not found."""
+-    left, right = 0, len(arr)
++    left, right = 0, len(arr) - 1
+     while left <= right:
+         mid = (left + right) // 2

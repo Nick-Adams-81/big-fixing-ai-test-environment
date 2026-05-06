@@ -1,0 +1,8 @@
+{
+  "id": "py-none-001",
+  "language": "python",
+  "category": "null-dereference",
+  "difficulty": "easy",
+  "description": "Calls len(name) without checking for None first, raising a TypeError when name is None.",
+  "entrypoint": "buggy.py"
+}

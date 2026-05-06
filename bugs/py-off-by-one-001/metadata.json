@@ -1,0 +1,8 @@
+{
+  "id": "py-off-by-one-001",
+  "language": "python",
+  "category": "off-by-one",
+  "difficulty": "easy",
+  "description": "Loop starts at index 0 instead of 1, including the first element in the sum.",
+  "entrypoint": "buggy.py"
+}

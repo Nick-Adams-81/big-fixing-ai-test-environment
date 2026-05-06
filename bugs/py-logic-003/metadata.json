@@ -1,0 +1,8 @@
+{
+  "id": "py-logic-003",
+  "language": "python",
+  "category": "logic",
+  "difficulty": "easy",
+  "description": "Subtracts 32 instead of adding it in the Celsius to Fahrenheit formula.",
+  "entrypoint": "buggy.py"
+}

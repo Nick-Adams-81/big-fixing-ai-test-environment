@@ -1,0 +1,8 @@
+{
+  "id": "py-type-error-001",
+  "language": "python",
+  "category": "type-error",
+  "difficulty": "easy",
+  "description": "Uses integer division (//) instead of float division (/), truncating the result.",
+  "entrypoint": "buggy.py"
+}

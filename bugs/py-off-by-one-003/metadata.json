@@ -1,0 +1,8 @@
+{
+  "id": "py-off-by-one-003",
+  "language": "python",
+  "category": "off-by-one",
+  "difficulty": "medium",
+  "description": "Binary search initializes right to len(arr) instead of len(arr)-1, causing an IndexError when the target is larger than all elements.",
+  "entrypoint": "buggy.py"
+}
