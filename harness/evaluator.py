@@ -1,10 +1,11 @@
 import re
 import shutil
 import subprocess
-import sys
 import tempfile
 from dataclasses import dataclass
 from pathlib import Path
+
+from harness import sandbox
 
 
 @dataclass
@@ -47,11 +48,6 @@ def evaluate(bug_dir: Path, patch: str) -> EvalResult:
         if patch_proc.returncode != 0:
             return EvalResult(passed=0, failed=0, errors=1)
 
-        pytest_proc = subprocess.run(
-            [sys.executable, "-m", "pytest", str(patched_dir / "tests"), "-q", "--tb=no", "--no-header"],
-            capture_output=True,
-            text=True,
-        )
-
-        passed, failed, errors = _parse_counts(pytest_proc.stdout)
+        stdout, _, _ = sandbox.run_tests(patched_dir)
+        passed, failed, errors = _parse_counts(stdout)
         return EvalResult(passed=passed, failed=failed, errors=errors)

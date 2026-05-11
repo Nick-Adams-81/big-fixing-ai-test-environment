@@ -89,6 +89,21 @@ The harness calls `fix()`, applies the patch, runs the tests, and scores the res
 
 ---
 
+## Prerequisites
+
+- Python 3.11+
+- [Docker](https://docs.docker.com/get-docker/) — required for sandboxed test execution
+
+Build the sandbox image once before running anything:
+
+```bash
+docker build -t bug-fixer-sandbox:latest -f docker/Dockerfile docker/
+```
+
+The image is ~200 MB and is reused across all runs. The harness will also build it automatically on first use if it doesn't exist.
+
+---
+
 ## Quickstart
 
 ```bash
