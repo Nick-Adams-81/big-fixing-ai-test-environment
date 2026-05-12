@@ -77,17 +77,49 @@ Categories include: `off-by-one`, `null-dereference`, `type-error`, `logic`, `co
 
 ---
 
-## Agent interface
+## Agents
 
-Agents implement a single method:
+| Agent | `--agent` value | Default model | Notes |
+|---|---|---|---|
+| Passthrough | `passthrough` | — | Returns ground-truth patch; used for CI and sanity checks |
+| Claude | `claude` | `claude-sonnet-4-6` | Uses extended thinking; supports multi-turn retry loop |
+| OpenAI | `openai` | `gpt-4o` | Optional — see below |
+
+### Selecting a model
+
+Use `--model` to override the default for any agent:
+
+```bash
+python -m harness.runner bugs/py-logic-001 --agent claude --model claude-opus-4-7
+python -m harness.runner bugs/py-logic-001 --agent openai --model gpt-4o-mini
+```
+
+The model name is recorded in every result JSON and shown in the batch report header.
+
+### OpenAI agent (optional)
+
+The OpenAI agent is not installed by default. To use it:
+
+```bash
+pip install openai
+# Add OPENAI_API_KEY=<your-key> to .env
+python -m harness.runner bugs/py-logic-001 --agent openai
+```
+
+### Agent interface
+
+Agents implement two methods:
 
 ```python
 class Agent:
     def fix(self, bug_dir: Path) -> str:
         """Return a unified diff patch string."""
+
+    def retry(self, test_output: str) -> str:
+        """Given test failure output, return a revised patch (optional)."""
 ```
 
-The harness calls `fix()`, applies the patch, runs the tests, and scores the result. Swapping agents is one line in `harness/runner.py`.
+The harness calls `fix()`, evaluates the patch, and if tests fail calls `retry()` with the failure output up to 3 times. Agents that don't support retry return `""` from `retry()` and the loop stops.
 
 ---
 

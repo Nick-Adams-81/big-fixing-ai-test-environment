@@ -14,6 +14,7 @@ class EvalResult:
     passed: int
     failed: int
     errors: int
+    test_output: str = ""
 
     @property
     def total(self) -> int:
@@ -64,6 +65,6 @@ def evaluate(bug_dir: Path, patch: str) -> EvalResult:
         if patch_proc.returncode != 0:
             return EvalResult(passed=0, failed=0, errors=1)
 
-        stdout, _, _ = sandbox.run_tests(patched_dir, language=language)
+        stdout, stderr, _ = sandbox.run_tests(patched_dir, language=language)
         passed, failed, errors = _parse_counts(stdout)
-        return EvalResult(passed=passed, failed=failed, errors=errors)
+        return EvalResult(passed=passed, failed=failed, errors=errors, test_output=stdout or stderr)

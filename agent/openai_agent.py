@@ -1,22 +1,21 @@
 import json
 from pathlib import Path
 
-import anthropic
 from dotenv import load_dotenv
+from openai import OpenAI
 
 from agent.base import Agent
 from agent.prompts import build_prompt, extract_patch, read_tests, system_prompt
 
 load_dotenv()
 
-DEFAULT_MODEL = "claude-sonnet-4-6"
-THINKING_BUDGET_TOKENS = 8000
-MAX_TOKENS = THINKING_BUDGET_TOKENS + 2048
+DEFAULT_MODEL = "gpt-4o"
+MAX_TOKENS = 2048
 
 
-class ClaudeAgent(Agent):
+class OpenAIAgent(Agent):
     def __init__(self, model: str = DEFAULT_MODEL) -> None:
-        self._client = anthropic.Anthropic()
+        self._client = OpenAI()
         self._model = model
         self.input_tokens: int = 0
         self.output_tokens: int = 0
@@ -51,20 +50,13 @@ class ClaudeAgent(Agent):
         return self._call()
 
     def _call(self) -> str:
-        response = self._client.messages.create(
+        response = self._client.chat.completions.create(
             model=self._model,
             max_tokens=MAX_TOKENS,
-            thinking={"type": "enabled", "budget_tokens": THINKING_BUDGET_TOKENS},
-            system=self._system,
-            messages=self._messages,
+            messages=[{"role": "system", "content": self._system}] + self._messages,
         )
-        text = next(block.text for block in response.content if block.type == "text")
-        # Preserve full content list (including thinking blocks) so multi-turn retries
-        # have the required context — the API rejects history that omits thinking blocks.
-        self._messages.append({
-            "role": "assistant",
-            "content": [block.model_dump() for block in response.content],
-        })
-        self.input_tokens += response.usage.input_tokens
-        self.output_tokens += response.usage.output_tokens
+        text = response.choices[0].message.content or ""
+        self._messages.append({"role": "assistant", "content": text})
+        self.input_tokens += response.usage.prompt_tokens
+        self.output_tokens += response.usage.completion_tokens
         return extract_patch(text, self._entrypoint)
