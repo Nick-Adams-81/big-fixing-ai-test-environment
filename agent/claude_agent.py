@@ -1,3 +1,4 @@
+import json
 import re
 from pathlib import Path
 
@@ -11,36 +12,54 @@ load_dotenv()
 MODEL = "claude-sonnet-4-6"
 MAX_TOKENS = 1024
 
-_SYSTEM_PROMPT = """\
-You are an expert software engineer specializing in debugging Python code.
-You will be given a buggy Python file and its failing test suite.
-Your task is to identify the bug and return a unified diff patch that fixes it.
-
-Rules:
-- Output ONLY the unified diff patch, nothing else — no explanation, no prose.
-- Use exactly this header format:
-  --- a/buggy.py
-  +++ b/buggy.py
-"""
+_LANGUAGE_LABELS = {
+    "python": ("Python", "python"),
+    "typescript": ("TypeScript", "typescript"),
+    "go": ("Go", "go"),
+}
 
 
-def _build_prompt(buggy_code: str, tests: str) -> str:
+def _system_prompt(language: str) -> str:
+    lang_name, _ = _LANGUAGE_LABELS.get(language, ("", ""))
     return (
-        f"### buggy.py\n```python\n{buggy_code}\n```\n\n"
-        f"### tests\n```python\n{tests}\n```\n\n"
-        "Produce a unified diff patch to fix the bug in buggy.py."
+        f"You are an expert software engineer specializing in debugging {lang_name} code.\n"
+        f"You will be given a buggy {lang_name} file and its failing test suite.\n"
+        "Your task is to identify the bug and return a unified diff patch that fixes it.\n\n"
+        "Rules:\n"
+        "- Output ONLY the unified diff patch, nothing else — no explanation, no prose.\n"
+        "- Use exactly this header format:\n"
+        "  --- a/<filename>\n"
+        "  +++ b/<filename>"
     )
 
 
-def _extract_patch(text: str) -> str:
+def _build_prompt(buggy_code: str, tests: str, entrypoint: str, language: str) -> str:
+    _, lang_tag = _LANGUAGE_LABELS.get(language, ("", ""))
+    return (
+        f"### {entrypoint}\n```{lang_tag}\n{buggy_code}\n```\n\n"
+        f"### tests\n```{lang_tag}\n{tests}\n```\n\n"
+        f"Produce a unified diff patch to fix the bug in {entrypoint}."
+    )
+
+
+def _extract_patch(text: str, entrypoint: str) -> str:
     text = text.strip()
     if text.startswith("---"):
         return text + "\n"
     if m := re.search(r"```(?:diff|patch)?\n(.*?)```", text, re.DOTALL):
         return m.group(1).strip() + "\n"
-    if m := re.search(r"(--- a/buggy\.py.*)", text, re.DOTALL):
+    escaped = re.escape(entrypoint)
+    if m := re.search(rf"(--- a/{escaped}.*)", text, re.DOTALL):
         return m.group(1).strip() + "\n"
     return ""
+
+
+def _read_tests(bug_dir: Path, language: str) -> str:
+    if language == "go":
+        test_files = sorted(bug_dir.glob("*_test.go"))
+    else:
+        test_files = sorted((bug_dir / "tests").glob("test_fix*"))
+    return "\n\n".join(f.read_text() for f in test_files)
 
 
 class ClaudeAgent(Agent):
@@ -50,18 +69,21 @@ class ClaudeAgent(Agent):
         self.output_tokens: int = 0
 
     def fix(self, bug_dir: Path) -> str:
-        buggy_code = (bug_dir / "buggy.py").read_text()
-        test_files = sorted((bug_dir / "tests").glob("test_*.py"))
-        tests = "\n\n".join(f.read_text() for f in test_files)
+        metadata = json.loads((bug_dir / "metadata.json").read_text())
+        language = metadata.get("language", "python")
+        entrypoint = metadata.get("entrypoint", "buggy.py")
+
+        buggy_code = (bug_dir / entrypoint).read_text()
+        tests = _read_tests(bug_dir, language)
 
         response = self._client.messages.create(
             model=MODEL,
             max_tokens=MAX_TOKENS,
-            system=_SYSTEM_PROMPT,
-            messages=[{"role": "user", "content": _build_prompt(buggy_code, tests)}],
+            system=_system_prompt(language),
+            messages=[{"role": "user", "content": _build_prompt(buggy_code, tests, entrypoint, language)}],
         )
 
         self.input_tokens = response.usage.input_tokens
         self.output_tokens = response.usage.output_tokens
 
-        return _extract_patch(response.content[0].text)
+        return _extract_patch(response.content[0].text, entrypoint)
