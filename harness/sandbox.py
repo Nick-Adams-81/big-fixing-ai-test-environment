@@ -4,6 +4,19 @@ from pathlib import Path
 DOCKER_IMAGE = "bug-fixer-sandbox:latest"
 DEFAULT_TIMEOUT = 30
 
+_PYTEST_CMD = [
+    "python", "-m", "pytest", "/bug/tests", "-q", "--tb=no", "--no-header",
+    "-p", "no:cacheprovider",
+]
+_VITEST_CMD = [
+    "sh", "-c",
+    "cd /runner && node node_modules/.bin/vitest run --root /bug --reporter verbose",
+]
+_GO_CMD = [
+    "sh", "-c",
+    "cd /bug && go test -v ./...",
+]
+
 
 def _ensure_image() -> None:
     result = subprocess.run(
@@ -19,9 +32,15 @@ def _ensure_image() -> None:
         )
 
 
-def run_tests(bug_dir: Path, timeout: int = DEFAULT_TIMEOUT) -> tuple[str, str, int]:
-    """Run pytest for bug_dir inside a Docker sandbox. Returns (stdout, stderr, returncode)."""
+def run_tests(bug_dir: Path, language: str = "python", timeout: int = DEFAULT_TIMEOUT) -> tuple[str, str, int]:
+    """Run tests for bug_dir inside a Docker sandbox. Returns (stdout, stderr, returncode)."""
     _ensure_image()
+    if language == "typescript":
+        cmd = _VITEST_CMD
+    elif language == "go":
+        cmd = _GO_CMD
+    else:
+        cmd = _PYTEST_CMD
     try:
         proc = subprocess.run(
             [
@@ -31,9 +50,7 @@ def run_tests(bug_dir: Path, timeout: int = DEFAULT_TIMEOUT) -> tuple[str, str, 
                 "--cpus", "1",
                 "-v", f"{bug_dir.resolve()}:/bug:ro",
                 DOCKER_IMAGE,
-                "python", "-m", "pytest", "/bug/tests", "-q", "--tb=no", "--no-header",
-                "-p", "no:cacheprovider",
-            ],
+            ] + cmd,
             capture_output=True,
             text=True,
             timeout=timeout,

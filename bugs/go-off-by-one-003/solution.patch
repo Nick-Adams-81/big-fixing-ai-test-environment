@@ -1,0 +1,9 @@
+--- a/buggy.go
++++ b/buggy.go
+@@ -1,5 +1,5 @@
+ package buggy
+ 
+ func LastN(s []int, n int) []int {
+-	return s[len(s)-n-1:]
++	return s[len(s)-n:]
+ }

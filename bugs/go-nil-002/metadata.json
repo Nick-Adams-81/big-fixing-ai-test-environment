@@ -1,0 +1,8 @@
+{
+  "id": "go-nil-002",
+  "language": "go",
+  "category": "null-dereference",
+  "difficulty": "easy",
+  "description": "Double dereferences a nil pointer instead of returning 0.",
+  "entrypoint": "buggy.go"
+}

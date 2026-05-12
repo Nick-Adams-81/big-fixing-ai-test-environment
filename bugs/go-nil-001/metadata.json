@@ -1,0 +1,8 @@
+{
+  "id": "go-nil-001",
+  "language": "go",
+  "category": "null-dereference",
+  "difficulty": "easy",
+  "description": "Head panics on an empty slice instead of returning empty string.",
+  "entrypoint": "buggy.go"
+}

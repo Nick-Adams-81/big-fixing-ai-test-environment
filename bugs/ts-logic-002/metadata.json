@@ -1,0 +1,8 @@
+{
+  "id": "ts-logic-002",
+  "language": "typescript",
+  "category": "logic",
+  "difficulty": "easy",
+  "description": "clamp returns min instead of value when value is in range.",
+  "entrypoint": "buggy.ts"
+}

@@ -1,0 +1,8 @@
+{
+  "id": "py-logic-009",
+  "language": "python",
+  "category": "logic",
+  "difficulty": "medium",
+  "description": "rotate_right performs a left rotation instead of right.",
+  "entrypoint": "buggy.py"
+}

@@ -1,0 +1,9 @@
+--- a/buggy.go
++++ b/buggy.go
+@@ -1,5 +1,5 @@
+ package buggy
+ 
+ func FirstN(s []int, n int) []int {
+-	return s[:n-1]
++	return s[:n]
+ }

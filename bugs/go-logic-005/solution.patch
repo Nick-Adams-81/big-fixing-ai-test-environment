@@ -1,0 +1,9 @@
+--- a/buggy.go
++++ b/buggy.go
+@@ -1,5 +1,5 @@
+ package buggy
+ 
+ func Divide(a, b float64) float64 {
+-	return b / a
++	return a / b
+ }

@@ -1,0 +1,7 @@
+--- a/buggy.py
++++ b/buggy.py
+@@ -1,3 +1,3 @@
+ def total_length(strings: list) -> int:
+     """Return total character count across all strings."""
+-    return sum(strings)
++    return sum(len(s) for s in strings)

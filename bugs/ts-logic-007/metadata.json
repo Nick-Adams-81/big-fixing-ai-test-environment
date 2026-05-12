@@ -1,0 +1,8 @@
+{
+  "id": "ts-logic-007",
+  "language": "typescript",
+  "category": "logic",
+  "difficulty": "medium",
+  "description": "factorial uses addition instead of multiplication.",
+  "entrypoint": "buggy.ts"
+}

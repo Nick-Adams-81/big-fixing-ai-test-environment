@@ -1,0 +1,8 @@
+{
+  "id": "py-none-003",
+  "language": "python",
+  "category": "null-dereference",
+  "difficulty": "easy",
+  "description": "safe_first tries to index an empty list instead of returning None.",
+  "entrypoint": "buggy.py"
+}

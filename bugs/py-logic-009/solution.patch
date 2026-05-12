@@ -1,0 +1,8 @@
+--- a/buggy.py
++++ b/buggy.py
+@@ -3,4 +3,4 @@
+     if not lst:
+         return lst
+     k = k % len(lst)
+-    return lst[k:] + lst[:k]
++    return lst[-k:] + lst[:-k]

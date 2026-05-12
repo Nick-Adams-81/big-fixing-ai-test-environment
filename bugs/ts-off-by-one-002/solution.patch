@@ -1,0 +1,10 @@
+--- a/buggy.ts
++++ b/buggy.ts
+@@ -1,6 +1,6 @@
+ export function sumUpTo(n: number): number {
+     let total = 0;
+-    for (let i = 1; i < n; i++) {
++    for (let i = 1; i <= n; i++) {
+         total += i;
+     }
+     return total;

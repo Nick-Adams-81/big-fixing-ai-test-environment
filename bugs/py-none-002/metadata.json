@@ -1,0 +1,8 @@
+{
+  "id": "py-none-002",
+  "language": "python",
+  "category": "null-dereference",
+  "difficulty": "easy",
+  "description": "get_value calls .strip() on None when key is missing.",
+  "entrypoint": "buggy.py"
+}

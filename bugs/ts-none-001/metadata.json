@@ -1,0 +1,8 @@
+{
+  "id": "ts-none-001",
+  "language": "typescript",
+  "category": "null-dereference",
+  "difficulty": "easy",
+  "description": "getLength accesses .length without checking for null.",
+  "entrypoint": "buggy.ts"
+}

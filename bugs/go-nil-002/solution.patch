@@ -1,0 +1,11 @@
+--- a/buggy.go
++++ b/buggy.go
+@@ -1,5 +1,8 @@
+ package buggy
+ 
+ func Double(p *int) int {
++	if p == nil {
++		return 0
++	}
+ 	return *p * 2
+ }

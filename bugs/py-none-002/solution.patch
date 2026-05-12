@@ -1,0 +1,8 @@
+--- a/buggy.py
++++ b/buggy.py
+@@ -1,4 +1,4 @@
+ def get_value(d: dict, key: str) -> str:
+     """Return stripped value for key, or empty string if not found."""
+     value = d.get(key)
+-    return value.strip()
++    return value.strip() if value is not None else ""

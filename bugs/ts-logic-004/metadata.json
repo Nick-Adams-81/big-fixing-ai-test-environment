@@ -1,0 +1,8 @@
+{
+  "id": "ts-logic-004",
+  "language": "typescript",
+  "category": "logic",
+  "difficulty": "medium",
+  "description": "fibonacci recurses with n-3 instead of n-2.",
+  "entrypoint": "buggy.ts"
+}

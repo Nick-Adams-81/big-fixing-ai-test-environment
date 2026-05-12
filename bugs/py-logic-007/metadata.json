@@ -1,0 +1,8 @@
+{
+  "id": "py-logic-007",
+  "language": "python",
+  "category": "logic",
+  "difficulty": "easy",
+  "description": "count_divisible uses != instead of ==.",
+  "entrypoint": "buggy.py"
+}

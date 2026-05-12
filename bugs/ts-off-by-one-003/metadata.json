@@ -1,0 +1,8 @@
+{
+  "id": "ts-off-by-one-003",
+  "language": "typescript",
+  "category": "off-by-one",
+  "difficulty": "easy",
+  "description": "lastN returns one fewer element than requested.",
+  "entrypoint": "buggy.ts"
+}

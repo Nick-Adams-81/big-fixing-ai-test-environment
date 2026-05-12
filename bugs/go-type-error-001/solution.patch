@@ -1,0 +1,11 @@
+--- a/buggy.go
++++ b/buggy.go
+@@ -3,7 +3,7 @@
+ func SumLengths(strs []string) int {
+ 	total := 0
+ 	for _, s := range strs {
+-		total += len(strs)
++		total += len(s)
+ 	}
+ 	return total
+ }

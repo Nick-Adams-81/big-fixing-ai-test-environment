@@ -1,5 +1,6 @@
 results/*
 !results/.gitkeep
+dataset.jsonl
 __pycache__/
 *.pyc
 *.pyo

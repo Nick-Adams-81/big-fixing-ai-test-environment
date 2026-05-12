@@ -1,0 +1,8 @@
+{
+  "id": "ts-none-002",
+  "language": "typescript",
+  "category": "null-dereference",
+  "difficulty": "easy",
+  "description": "greet calls toUpperCase on name without checking for undefined.",
+  "entrypoint": "buggy.ts"
+}

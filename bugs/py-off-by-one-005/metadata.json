@@ -1,0 +1,8 @@
+{
+  "id": "py-off-by-one-005",
+  "language": "python",
+  "category": "off-by-one",
+  "difficulty": "easy",
+  "description": "Loop repeats n-1 times instead of n.",
+  "entrypoint": "buggy.py"
+}

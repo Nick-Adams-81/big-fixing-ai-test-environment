@@ -1,0 +1,8 @@
+{
+  "id": "go-logic-001",
+  "language": "go",
+  "category": "logic",
+  "difficulty": "easy",
+  "description": "IsEven checks remainder equals 1 instead of 0.",
+  "entrypoint": "buggy.go"
+}

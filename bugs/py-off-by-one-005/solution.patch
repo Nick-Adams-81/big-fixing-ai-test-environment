@@ -1,0 +1,10 @@
+--- a/buggy.py
++++ b/buggy.py
+@@ -1,6 +1,6 @@
+ def repeat_str(s: str, n: int) -> str:
+     """Return string s repeated n times."""
+     result = ""
+-    for _ in range(n - 1):
++    for _ in range(n):
+         result += s
+     return result

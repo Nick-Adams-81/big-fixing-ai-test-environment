@@ -1,0 +1,8 @@
+{
+  "id": "go-off-by-one-001",
+  "language": "go",
+  "category": "off-by-one",
+  "difficulty": "easy",
+  "description": "FirstN returns n-1 elements instead of n.",
+  "entrypoint": "buggy.go"
+}

@@ -1,0 +1,8 @@
+{
+  "id": "go-logic-005",
+  "language": "go",
+  "category": "logic",
+  "difficulty": "easy",
+  "description": "Divide returns b/a instead of a/b.",
+  "entrypoint": "buggy.go"
+}

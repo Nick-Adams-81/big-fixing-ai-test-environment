@@ -1,0 +1,8 @@
+--- a/buggy.py
++++ b/buggy.py
+@@ -4,4 +4,4 @@
+         return lo
+     if value > hi:
+         return hi
+-    return lo
++    return value

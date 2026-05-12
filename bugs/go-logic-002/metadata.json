@@ -1,0 +1,8 @@
+{
+  "id": "go-logic-002",
+  "language": "go",
+  "category": "logic",
+  "difficulty": "easy",
+  "description": "Clamp returns lo instead of value when value is in range.",
+  "entrypoint": "buggy.go"
+}

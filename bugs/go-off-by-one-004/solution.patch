@@ -1,0 +1,11 @@
+--- a/buggy.go
++++ b/buggy.go
+@@ -1,7 +1,7 @@
+ package buggy
+ 
+ func Contains(s []int, target int) bool {
+-	for i := 0; i < len(s)-1; i++ {
++	for i := 0; i < len(s); i++ {
+ 		if s[i] == target {
+ 			return true
+ 		}

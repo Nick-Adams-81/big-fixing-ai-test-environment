@@ -1,0 +1,11 @@
+--- a/buggy.go
++++ b/buggy.go
+@@ -3,7 +3,7 @@
+ func CountOccurrences(s []int, target int) int {
+ 	count := 0
+ 	for _, v := range s {
+-		if v != target {
++		if v == target {
+ 			count++
+ 		}
+ 	}

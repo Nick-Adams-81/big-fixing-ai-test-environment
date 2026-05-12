@@ -1,0 +1,8 @@
+{
+  "id": "go-logic-003",
+  "language": "go",
+  "category": "logic",
+  "difficulty": "easy",
+  "description": "Abs returns n unchanged when n is negative.",
+  "entrypoint": "buggy.go"
+}

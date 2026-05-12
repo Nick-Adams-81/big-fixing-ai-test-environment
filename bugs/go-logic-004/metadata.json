@@ -1,0 +1,8 @@
+{
+  "id": "go-logic-004",
+  "language": "go",
+  "category": "logic",
+  "difficulty": "medium",
+  "description": "Fibonacci recurses with n-3 instead of n-2.",
+  "entrypoint": "buggy.go"
+}

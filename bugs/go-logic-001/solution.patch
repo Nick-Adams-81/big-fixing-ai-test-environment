@@ -1,0 +1,9 @@
+--- a/buggy.go
++++ b/buggy.go
+@@ -1,5 +1,5 @@
+ package buggy
+ 
+ func IsEven(n int) bool {
+-	return n%2 == 1
++	return n%2 == 0
+ }

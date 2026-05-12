@@ -1,0 +1,8 @@
+{
+  "id": "ts-logic-008",
+  "language": "typescript",
+  "category": "logic",
+  "difficulty": "medium",
+  "description": "max3 returns a in the final else branch instead of c.",
+  "entrypoint": "buggy.ts"
+}

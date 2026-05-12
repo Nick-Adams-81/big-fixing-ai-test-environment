@@ -1,0 +1,8 @@
+--- a/buggy.py
++++ b/buggy.py
+@@ -5,4 +5,4 @@
+     for num in numbers[1:]:
+         current_sum = max(num, current_sum + num)
+         max_sum = max(max_sum, current_sum)
+-    return current_sum
++    return max_sum

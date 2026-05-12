@@ -1,0 +1,8 @@
+{
+  "id": "go-off-by-one-004",
+  "language": "go",
+  "category": "off-by-one",
+  "difficulty": "medium",
+  "description": "Contains stops one element short, missing the last element.",
+  "entrypoint": "buggy.go"
+}

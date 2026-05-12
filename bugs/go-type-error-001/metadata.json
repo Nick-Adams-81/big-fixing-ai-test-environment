@@ -1,0 +1,8 @@
+{
+  "id": "go-type-error-001",
+  "language": "go",
+  "category": "type-error",
+  "difficulty": "easy",
+  "description": "SumLengths uses len(strs) instead of len(s) inside the loop.",
+  "entrypoint": "buggy.go"
+}

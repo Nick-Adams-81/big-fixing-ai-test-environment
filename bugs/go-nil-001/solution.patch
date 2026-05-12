@@ -1,0 +1,11 @@
+--- a/buggy.go
++++ b/buggy.go
+@@ -1,5 +1,8 @@
+ package buggy
+ 
+ func Head(s []string) string {
++	if len(s) == 0 {
++		return ""
++	}
+ 	return s[0]
+ }

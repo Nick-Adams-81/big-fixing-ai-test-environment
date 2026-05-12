@@ -1,0 +1,8 @@
+{
+  "id": "py-logic-006",
+  "language": "python",
+  "category": "logic",
+  "difficulty": "easy",
+  "description": "clamp returns lo instead of value when in range.",
+  "entrypoint": "buggy.py"
+}

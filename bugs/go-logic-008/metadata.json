@@ -1,0 +1,8 @@
+{
+  "id": "go-logic-008",
+  "language": "go",
+  "category": "logic",
+  "difficulty": "medium",
+  "description": "CountOccurrences counts non-matching elements instead of matching ones.",
+  "entrypoint": "buggy.go"
+}

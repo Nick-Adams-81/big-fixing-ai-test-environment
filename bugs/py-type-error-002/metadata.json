@@ -1,0 +1,8 @@
+{
+  "id": "py-type-error-002",
+  "language": "python",
+  "category": "type-error",
+  "difficulty": "easy",
+  "description": "total_length sums the strings themselves instead of their lengths.",
+  "entrypoint": "buggy.py"
+}

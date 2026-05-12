@@ -1,0 +1,8 @@
+{
+  "id": "ts-off-by-one-002",
+  "language": "typescript",
+  "category": "off-by-one",
+  "difficulty": "easy",
+  "description": "sumUpTo uses i < n so it skips the last value.",
+  "entrypoint": "buggy.ts"
+}

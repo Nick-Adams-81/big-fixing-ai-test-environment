@@ -1,0 +1,11 @@
+--- a/buggy.go
++++ b/buggy.go
+@@ -2,7 +2,7 @@
+ 
+ func Repeat(s string, n int) string {
+ 	result := ""
+-	for i := 0; i < n-1; i++ {
++	for i := 0; i < n; i++ {
+ 		result += s
+ 	}
+ 	return result

@@ -1,0 +1,8 @@
+{
+  "id": "go-logic-006",
+  "language": "go",
+  "category": "logic",
+  "difficulty": "easy",
+  "description": "Max returns b when a is larger.",
+  "entrypoint": "buggy.go"
+}

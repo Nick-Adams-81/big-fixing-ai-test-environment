@@ -1,0 +1,8 @@
+{
+  "id": "ts-type-error-001",
+  "language": "typescript",
+  "category": "type-error",
+  "difficulty": "easy",
+  "description": "repeat appends the count n instead of the string s.",
+  "entrypoint": "buggy.ts"
+}

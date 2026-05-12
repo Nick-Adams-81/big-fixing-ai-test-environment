@@ -1,0 +1,41 @@
+name: Verify Bug Corpus
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Build sandbox image
+        run: docker build -t bug-fixer-sandbox:latest -f docker/Dockerfile docker/
+
+      - name: Run passthrough agent on all bugs
+        run: python -m harness.batch --agent passthrough --output results/ci
+
+      - name: Assert 100% pass rate
+        run: |
+          python - <<'EOF'
+          import json, sys
+          summary = json.load(open("results/ci/summary.json"))
+          passed = summary["bugs_passed"]
+          total = summary["total_bugs"]
+          if passed < total:
+              print(f"FAIL: {passed}/{total} bugs passed")
+              sys.exit(1)
+          print(f"OK: {passed}/{total} bugs passed")
+          EOF

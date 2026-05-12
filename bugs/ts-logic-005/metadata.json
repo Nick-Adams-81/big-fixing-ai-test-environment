@@ -1,0 +1,8 @@
+{
+  "id": "ts-logic-005",
+  "language": "typescript",
+  "category": "logic",
+  "difficulty": "easy",
+  "description": "divide has its arguments swapped.",
+  "entrypoint": "buggy.ts"
+}

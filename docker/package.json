@@ -1,0 +1,8 @@
+{
+  "name": "runner",
+  "type": "module",
+  "private": true,
+  "dependencies": {
+    "vitest": "^2.0.0"
+  }
+}

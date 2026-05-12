@@ -1,0 +1,8 @@
+{
+  "id": "py-logic-008",
+  "language": "python",
+  "category": "logic",
+  "difficulty": "medium",
+  "description": "max_subarray_sum returns current_sum instead of max_sum.",
+  "entrypoint": "buggy.py"
+}
