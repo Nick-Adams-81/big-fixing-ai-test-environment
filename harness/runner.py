@@ -9,6 +9,7 @@ from harness.evaluator import evaluate
 
 AGENTS: dict[str, str] = {
     "passthrough": "agent.passthrough_agent.PassthroughAgent",
+    "claude": "agent.claude_agent.ClaudeAgent",
 }
 
 
@@ -43,6 +44,8 @@ def run(bug_dir: Path, agent_name: str, output_dir: Path) -> dict:
         "pass_rate": round(result.pass_rate, 4),
         "all_passed": result.all_passed,
         "latency_seconds": round(latency, 3),
+        "input_tokens": getattr(agent, "input_tokens", None),
+        "output_tokens": getattr(agent, "output_tokens", None),
     }
 
     output_dir.mkdir(parents=True, exist_ok=True)
