@@ -15,15 +15,28 @@ The goal is to make it easy to:
 
 ---
 
+## Supported languages
+
+| Language | Test runner | Bug naming |
+|---|---|---|
+| Python | pytest | `py-<category>-<id>` |
+| TypeScript | vitest | `ts-<category>-<id>` |
+| Go | `go test` | `go-<category>-<id>` |
+
+The sandbox auto-detects the language from `metadata.json` and runs the appropriate test runner. No configuration needed.
+
+---
+
 ## High-level architecture
 
 ```
 bugs/
   <id>/
-    buggy.py          # the broken file
-    tests/            # test suite that fails on buggy, passes on fixed
-    metadata.json     # language, category, difficulty, description
-    solution.patch    # ground-truth fix (used for scoring, not given to agent)
+    buggy.py / buggy.ts / buggy.go   # the broken file
+    tests/                            # test suite (Python, TypeScript)
+    buggy_test.go                     # test suite (Go — lives alongside source)
+    metadata.json                     # language, category, difficulty, description
+    solution.patch                    # ground-truth fix (used for scoring, not given to agent)
 
 agent/
   base.py             # Agent abstract interface
@@ -32,9 +45,10 @@ agent/
 
 harness/
   runner.py           # orchestrates agent + sandbox + evaluator for one bug
-  sandbox.py          # Docker-based isolated execution
-  evaluator.py        # runs tests, diffs output, produces pass/fail + metrics
+  sandbox.py          # Docker-based isolated execution (Python/TypeScript/Go)
+  evaluator.py        # applies patch, runs tests, produces pass/fail + metrics
   batch.py            # runs the full benchmark suite, collects aggregate stats
+  report.py           # prints a formatted results table from summary.json
 
 results/
   <run-id>/
@@ -73,7 +87,7 @@ class Agent:
         """Return a unified diff patch string."""
 ```
 
-The harness calls `fix()`, applies the patch, runs the tests, and scores the result. Swapping agents is one line.
+The harness calls `fix()`, applies the patch, runs the tests, and scores the result. Swapping agents is one line in `harness/runner.py`.
 
 ---
 
@@ -83,8 +97,7 @@ The harness calls `fix()`, applies the patch, runs the tests, and scores the res
 |---|---|
 | Pass rate | % of bugs where all tests pass after the patch |
 | Partial credit | % of tests passing (when full pass isn't achieved) |
-| Exact match | Patch is semantically equivalent to ground-truth solution |
-| Latency | Wall-clock seconds per bug |
+| Latency | Wall-clock seconds for the agent to produce a patch |
 | Token usage | Input/output tokens consumed (Claude agents) |
 
 ---
@@ -100,7 +113,7 @@ Build the sandbox image once before running anything:
 docker build -t bug-fixer-sandbox:latest -f docker/Dockerfile docker/
 ```
 
-The image is ~200 MB and is reused across all runs. The harness will also build it automatically on first use if it doesn't exist.
+The image includes Python (pytest), Node.js (vitest), and Go — all three language runtimes in one image. It is reused across all runs. The harness will also build it automatically on first use if it doesn't exist.
 
 ---
 
@@ -110,14 +123,35 @@ The image is ~200 MB and is reused across all runs. The harness will also build 
 # Install dependencies
 pip install -r requirements.txt
 
-# Run the agent against a single bug
+# Copy .env and add your Anthropic API key
+cp .env.example .env   # then edit .env
+
+# Run the Claude agent against a single bug
 python -m harness.runner bugs/py-off-by-one-001 --agent claude
 
-# Run the full benchmark suite
+# Run against a TypeScript bug
+python -m harness.runner bugs/ts-logic-001 --agent claude
+
+# Run against a Go bug
+python -m harness.runner bugs/go-off-by-one-001 --agent claude
+
+# Run the full benchmark suite (all 50 bugs)
 python -m harness.batch --agent claude --output results/my-run/
 
-# View results
+# Run only Python bugs
+for d in bugs/py-*/; do python -m harness.runner "$d" --agent claude; done
+
+# Run only TypeScript bugs
+for d in bugs/ts-*/; do python -m harness.runner "$d" --agent claude; done
+
+# Run only Go bugs
+for d in bugs/go-*/; do python -m harness.runner "$d" --agent claude; done
+
+# View a saved report
 python -m harness.report results/my-run/summary.json
+
+# Export corpus as JSONL for fine-tuning
+python scripts/export_dataset.py --output dataset.jsonl
 ```
 
 ---
@@ -125,14 +159,14 @@ python -m harness.report results/my-run/summary.json
 ## Adding a new bug
 
 ```bash
-python scripts/new_bug.py --id py-logic-007 --language python --category logic
-# scaffolds bugs/py-logic-007/ with empty buggy.py, tests/, and metadata.json
+python scripts/new_bug.py --id py-logic-010 --language python --category logic
+# scaffolds bugs/py-logic-010/ with empty buggy.py, tests/, and metadata.json
 ```
 
-Fill in `buggy.py` with the broken code, write tests that fail on it, then run:
+Fill in the buggy source file, write tests that fail on it, then verify:
 
 ```bash
-python scripts/verify_bug.py bugs/py-logic-007
+python scripts/verify_bug.py bugs/py-logic-010
 # checks: tests fail on buggy, tests pass on ground-truth patch
 ```
 
@@ -142,14 +176,22 @@ python scripts/verify_bug.py bugs/py-logic-007
 
 ```
 .
-├── bugs/               # bug corpus
+├── bugs/               # bug corpus (50 bugs: Python, TypeScript, Go)
 ├── agent/              # agent implementations
-├── harness/            # runner, sandbox, evaluator, batch runner
-├── scripts/            # dev utilities (new_bug, verify_bug, export_dataset)
+├── harness/            # runner, sandbox, evaluator, batch runner, report
+├── scripts/            # dev utilities (new_bug, verify_bug, export_dataset, generate_corpus)
+├── docker/             # Dockerfile and package.json for the sandbox image
 ├── results/            # benchmark run outputs (gitignored)
+├── .github/workflows/  # CI: verify all bugs on every push
 ├── requirements.txt
 └── README.md
 ```
+
+---
+
+## CI
+
+Every push and pull request runs `.github/workflows/verify-corpus.yml`, which builds the sandbox image and runs the passthrough agent against all 50 bugs. The workflow fails if any bug drops below 100%.
 
 ---
 
